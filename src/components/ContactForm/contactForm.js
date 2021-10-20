@@ -2,13 +2,22 @@ import { useState } from "react";
 import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import styles from "./contactForm.module.css";
+import axios from "axios";
 const initialValues = {
   name: "",
   email: "",
 };
 const ContactForm = () => {
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = (contactObj) => {
+    axios
+      .post("http://localhost:3001/contacts", contactObj)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(contactObj);
   };
   const validationSchema = Yup.object({
     name: Yup.string()
