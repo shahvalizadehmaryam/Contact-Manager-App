@@ -1,47 +1,61 @@
 import { useState } from "react";
+import { Formik, useFormik } from "formik";
+import * as Yup from "yup";
 import styles from "./contactForm.module.css";
+const initialValues = {
+  name: "",
+  email: "",
+};
 const ContactForm = () => {
-  const [formValue, setFormValue] = useState({
-    name: "",
-    email: "",
+  const onSubmit = (values) => {
+    console.log(values);
+  };
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required("Name is Required!")
+      .min(6, "Name must be 6 characters!"),
+    email: Yup.string()
+      .email("Email is Invalid format")
+      .required("Email is Required!"),
   });
-  const inputChangeHandler = (e) => {
-    setFormValue({
-      ...formValue,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const formSubmitHandler = (e) => {
-    e.preventDefault();
-    console.log(formValue);
-    setFormValue({
-      name: "",
-      email: "",
-    });
-  };
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: onSubmit,
+    validationSchema: validationSchema,
+    validateOnMount: true,
+  });
   return (
     <div className={styles.contactFormPart}>
       <h3> Add contact</h3>
-      <form onSubmit={formSubmitHandler}>
+      <form onSubmit={formik.handleSubmit}>
         <div className={styles.formControl}>
-          <label>Name</label>
+          <label htmlFor="name">Name</label>
           <input
             type="text"
             name="name"
-            value={formValue.name}
-            onChange={inputChangeHandler}
+            id="name"
+            {...formik.getFieldProps("name")}
           />
+
+          {formik.errors["name"] && formik.touched["name"] && (
+            <div className={styles.error}>{formik.errors["name"]}</div>
+          )}
         </div>
         <div className={styles.formControl}>
-          <label>Email</label>
+          <label htmlFor="email">Email</label>
           <input
             type="email"
             name="email"
-            value={formValue.email}
-            onChange={inputChangeHandler}
+            id="email"
+            {...formik.getFieldProps("email")}
           />
+          {formik.errors["email"] && formik.touched["email"] && (
+            <div className={styles.error}>{formik.errors["email"]}</div>
+          )}
         </div>
-        <button>Add</button>
+        <button type="submit" disabled={!formik.isValid}>
+          Add
+        </button>
       </form>
     </div>
   );
