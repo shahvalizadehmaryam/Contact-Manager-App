@@ -7,7 +7,7 @@ const initialValues = {
   name: "",
   email: "",
 };
-const ContactForm = () => {
+const ContactForm = ({ history }) => {
   const onSubmit = (contactObj) => {
     axios
       .post("http://localhost:3001/contacts", contactObj)
@@ -17,7 +17,7 @@ const ContactForm = () => {
       .catch((error) => {
         console.log(error);
       });
-    console.log(contactObj);
+    history.push("/");
   };
   const validationSchema = Yup.object({
     name: Yup.string()
