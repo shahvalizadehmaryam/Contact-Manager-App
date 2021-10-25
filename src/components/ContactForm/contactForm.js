@@ -36,7 +36,7 @@ const ContactForm = ({ history }) => {
   return (
     <div className={styles.contactFormPart}>
       <h3> Add contact</h3>
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} className={styles.form}>
         <div className={styles.formControl}>
           <label htmlFor="name">Name</label>
           <input
@@ -63,7 +63,7 @@ const ContactForm = ({ history }) => {
           )}
         </div>
         <button type="submit" disabled={!formik.isValid}>
-          Add
+          Add Contact
         </button>
       </form>
     </div>
