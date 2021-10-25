@@ -1,25 +1,31 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  deleteContact,
+  getContacts,
+} from "../../services/commentService";
 import Contact from "../Contact/contact";
 import styles from "./contactList.module.css";
 
 const ContactList = () => {
   const [contactList, setContactList] = useState(null);
   useEffect(() => {
-    getContactsList();
+    const fetchContacts = async () => {
+      const { data } = await getContacts();
+      setContactList(data);
+    };
+    try {
+      fetchContacts();
+    } catch (error) {}
   }, []);
 
-  const getContactsList = () => {
-    axios.get("http://localhost:3001/contacts").then((res) => {
-      setContactList(res.data);
-    });
-  };
-  const deleteContactHandler = (id) => {
-    axios
-      .delete(`http://localhost:3001/contacts/${id}`)
-      .then((res) => getContactsList())
-      .catch((err) => console.log(err));
+  const deleteContactHandler = async (id) => {
+    try {
+      const filteredData = contactList.filter((c) => c.id !== id);
+      setContactList(filteredData);
+      await deleteContact(id);
+    } catch (error) {}
   };
   return (
     <div>

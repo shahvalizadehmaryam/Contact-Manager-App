@@ -3,21 +3,17 @@ import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import styles from "./contactForm.module.css";
 import axios from "axios";
+import { addContact } from "../../services/commentService";
 const initialValues = {
   name: "",
   email: "",
 };
 const ContactForm = ({ history }) => {
-  const onSubmit = (contactObj) => {
-    axios
-      .post("http://localhost:3001/contacts", contactObj)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    history.push("/");
+  const onSubmit = async (contactObj) => {
+    try {
+    await addContact(contactObj);
+      history.push("/");
+    } catch (error) {}
   };
   const validationSchema = Yup.object({
     name: Yup.string()
