@@ -1,19 +1,35 @@
 import { useState } from "react";
 import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
-import styles from "./contactForm.module.css";
-import axios from "axios";
-import { addContact } from "../../services/commentService";
-const initialValues = {
-  name: "",
-  email: "",
-};
-const ContactForm = ({ history }) => {
-  const onSubmit = async (contactObj) => {
+import styles from "./editContact.module.css";
+import {
+  addContact,
+  getOneContact,
+  updateContact,
+} from "../../services/commentService";
+import { useEffect } from "react/cjs/react.development";
+// const initialValues = {
+//   name: "",
+//   email: "",
+// };
+const EditContact = ({ history, match }) => {
+  const [contact, setContact] = useState({ name: "", email: "" });
+  useEffect(() => {
+    const localFetch = async () => {
+      try {
+        const { data } = await getOneContact(match.params.id);
+        setContact({ name: data.name, email: data.email });
+      } catch (error) {}
+    };
+    localFetch();
+  }, []);
+  const onSubmit = async (contact) => {
     try {
-      await addContact(contactObj);
+      const { data } = await updateContact(contact, match.params.id);
       history.push("/");
-    } catch (error) {}
+    } catch (error) {
+      console.log("error on edit submit...");
+    }
   };
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -24,10 +40,11 @@ const ContactForm = ({ history }) => {
       .required("Email is Required!"),
   });
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: contact,
     onSubmit: onSubmit,
     validationSchema: validationSchema,
     validateOnMount: true,
+    enableReinitialize: true,
   });
   return (
     <div className={styles.contactFormPart}>
@@ -59,11 +76,11 @@ const ContactForm = ({ history }) => {
           )}
         </div>
         <button type="submit" disabled={!formik.isValid}>
-          Add Contact
+          Edit Contact
         </button>
       </form>
     </div>
   );
 };
 
-export default ContactForm;
+export default EditContact;

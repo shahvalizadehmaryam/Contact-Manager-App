@@ -8,5 +8,11 @@ export const deleteContact = (id) => {
 export const addContact = (contact) => {
   return http.post(`/contacts`, contact);
 };
+export const getOneContact = (id) => {
+  return http.get(`/contacts/${id}`);
+};
+export const updateContact = (contact,id) => {
+  return http.put(`/contacts/${id}`,contact);
+};
 
 export default http;
