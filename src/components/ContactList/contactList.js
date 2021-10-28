@@ -8,8 +8,8 @@ import { useToasts } from "react-toast-notifications";
 
 const ContactList = () => {
   const { addToast } = useToasts();
-  const [contactList, setContactList] = useState(null);
-  const [allContacts, setAllContacts] = useState(null);
+  const [contactList, setContactList] = useState([]);
+  const [allContacts, setAllContacts] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   useEffect(() => {
     const fetchContacts = async () => {
@@ -26,7 +26,7 @@ const ContactList = () => {
       const filteredData = contactList.filter((c) => c.id !== id);
       setContactList(filteredData);
       await deleteContact(id);
-      addToast("Added Successfully", { appearance: "success" });
+      addToast("deleted Successfully", { appearance: "success" });
     } catch (error) {
       addToast("something went wrong", { appearance: "error" });
     }
@@ -65,7 +65,7 @@ const ContactList = () => {
         value={searchVal}
         placeholder="search contact..."
       />
-      {contactList &&
+      {contactList.length ? (
         contactList.map((contact) => (
           <div className={styles.contactList} key={contact.id}>
             <Contact
@@ -73,7 +73,10 @@ const ContactList = () => {
               onDelete={() => deleteContactHandler(contact.id)}
             />
           </div>
-        ))}
+        ))
+      ) : (
+        <p>No Contacts Found!</p>
+      )}
     </div>
   );
 };

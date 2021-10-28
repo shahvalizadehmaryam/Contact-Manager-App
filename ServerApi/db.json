@@ -1,9 +1,3 @@
 {
-  "contacts": [
-    {
-      "name": "testUser",
-      "email": "test@Outlook.com",
-      "id": 3
-    }
-  ]
+  "contacts": []
 }
