@@ -1,19 +1,24 @@
-import { useState } from "react";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import styles from "./contactForm.module.css";
-import axios from "axios";
 import { addContact } from "../../services/commentService";
+import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
+import { useToasts } from "react-toast-notifications";
 const initialValues = {
   name: "",
   email: "",
 };
 const ContactForm = ({ history }) => {
+  const { addToast } = useToasts();
   const onSubmit = async (contactObj) => {
     try {
       await addContact(contactObj);
       history.push("/");
-    } catch (error) {}
+      addToast("Added Successfully", { appearance: "success" });
+    } catch (error) {
+      addToast("error.message", { appearance: "error" });
+    }
   };
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -31,7 +36,7 @@ const ContactForm = ({ history }) => {
   });
   return (
     <div className={styles.contactFormPart}>
-      <h3> Add contact</h3>
+      <h3 className={styles.formTitle}> Add contact</h3>
       <form onSubmit={formik.handleSubmit} className={styles.form}>
         <div className={styles.formControl}>
           <label htmlFor="name">Name</label>
@@ -62,6 +67,12 @@ const ContactForm = ({ history }) => {
           Add Contact
         </button>
       </form>
+      <Link to="/" className={styles.backToList}>
+        <span className={styles.arrowIcon}>
+          <FaArrowLeft />
+        </span>
+        <span>back to contactList</span>
+      </Link>
     </div>
   );
 };

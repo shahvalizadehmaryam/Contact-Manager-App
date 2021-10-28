@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import { deleteContact, getContacts } from "../../services/commentService";
 import Contact from "../Contact/contact";
 import styles from "./contactList.module.css";
+import { FaPlus } from "react-icons/fa";
+import { useToasts } from "react-toast-notifications";
 
 const ContactList = () => {
+  const { addToast } = useToasts();
   const [contactList, setContactList] = useState(null);
   const [allContacts, setAllContacts] = useState(null);
   const [searchVal, setSearchVal] = useState("");
@@ -23,7 +26,10 @@ const ContactList = () => {
       const filteredData = contactList.filter((c) => c.id !== id);
       setContactList(filteredData);
       await deleteContact(id);
-    } catch (error) {}
+      addToast("Added Successfully", { appearance: "success" });
+    } catch (error) {
+      addToast("something went wrong", { appearance: "error" });
+    }
   };
   const searchInputChangeHandler = (e) => {
     setSearchVal(e.target.value);
@@ -41,20 +47,24 @@ const ContactList = () => {
     }
   };
   return (
-    <div>
-      <h3>Contact List</h3>
-      <div>
-        <Link to="/add">
-          <button>add</button>
+    <div className={styles.contactsContainer}>
+      <div className={styles.top}>
+        <h3>Contact List</h3>
+        <Link to="/add" className={styles.linkStyle}>
+          <span className={styles.plusIcon}>
+            <FaPlus className={styles.iconPlus} />
+          </span>
+          <span></span>
+          add new contact
         </Link>
       </div>
-      <div>
-        <input
-          type="text"
-          onChange={searchInputChangeHandler}
-          value={searchVal}
-        />
-      </div>
+      <input
+        className={styles.input}
+        type="text"
+        onChange={searchInputChangeHandler}
+        value={searchVal}
+        placeholder="search contact..."
+      />
       {contactList &&
         contactList.map((contact) => (
           <div className={styles.contactList} key={contact.id}>

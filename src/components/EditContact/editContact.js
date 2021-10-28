@@ -1,18 +1,14 @@
 import { useState } from "react";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import styles from "./editContact.module.css";
-import {
-  addContact,
-  getOneContact,
-  updateContact,
-} from "../../services/commentService";
+import { FaArrowLeft } from "react-icons/fa";
+import { getOneContact, updateContact } from "../../services/commentService";
 import { useEffect } from "react/cjs/react.development";
-// const initialValues = {
-//   name: "",
-//   email: "",
-// };
+import { Link } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 const EditContact = ({ history, match }) => {
+  const { addToast } = useToasts();
   const [contact, setContact] = useState({ name: "", email: "" });
   useEffect(() => {
     const localFetch = async () => {
@@ -27,6 +23,7 @@ const EditContact = ({ history, match }) => {
     try {
       const { data } = await updateContact(contact, match.params.id);
       history.push("/");
+      addToast("Updated Successfully", { appearance: "success" });
     } catch (error) {
       console.log("error on edit submit...");
     }
@@ -79,6 +76,12 @@ const EditContact = ({ history, match }) => {
           Edit Contact
         </button>
       </form>
+      <Link to="/" className={styles.backToList}>
+        <span className={styles.arrowIcon}>
+          <FaArrowLeft />
+        </span>
+        <span>back to contactList</span>
+      </Link>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 .item {
   background-color: #fff;
-  width: 20rem;
+  width: 95%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9,13 +9,23 @@
   border-radius: 5px;
   margin-top: 20px;
 }
-.item button {
+.deleteBtn {
   cursor: pointer;
   outline: none;
-  border: 1px solid #dc2626;
-  color: #dc2626;
+  border: 1px solid #e1474d;
+  color: #e1474d;
   background-color: #fff;
   padding: 5px 10px;
+  border-radius: 5px;
+}
+.editBtn {
+  margin: 0 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  outline: none;
+  border: 1px solid #ccaa13;
+  color: #ccaa13;
+  background-color: #fff;
   border-radius: 5px;
 }
 .itemDetail {
@@ -25,10 +35,16 @@
 .userIcon {
   width: 20px;
   height: 20px;
-  margin-right: 5px;
+  margin-right: 10px;
+}
+.editIcon {
+  color: #ccaa13;
 }
 .contactItem {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+.btnPart {
+  display: flex;
 }
